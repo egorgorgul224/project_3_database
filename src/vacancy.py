@@ -39,7 +39,6 @@ class Vacancy:
         vacancy_info = f"{self.name}. Ссылка: {self.url}. Зарплата: {salary_info}. Требуемый опыт: {experience_info}."
         return vacancy_info
 
-
     @classmethod
     def process_vacancy(cls, vacancy_json_data: dict) -> Any:
         """Классовый метод для обработки информации по вакансии из json-данных и формирования экземпляра класса."""
