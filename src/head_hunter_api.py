@@ -10,7 +10,7 @@ class HeadHunterApi(BaseApi):
 
     per_page: int
 
-    def __init__(self, per_page: int = 50) -> None:
+    def __init__(self, per_page: int = 10) -> None:
         """Метод для инициализации экземпляра класса HeadHunterApi."""
 
         self.__url = "https://api.hh.ru/vacancies"
@@ -52,9 +52,9 @@ class HeadHunterApi(BaseApi):
         else:
             return response.json()
 
-    def get_vacancies(self, keyword: str, max_per_page: int = 1) -> Any:
+    def get_vacancies(self, employer_id: str, max_per_page: int = 1) -> Any:
         """Метод возвращает список словарей с вакансиями по заданному ключевому слову(keyword)."""
-        self.__params["text"] = keyword
+        self.__params["employer_id"] = employer_id
         self.__vacancies.clear()
         while self.__params.get("page") < max_per_page:
             data = self.api_connect()

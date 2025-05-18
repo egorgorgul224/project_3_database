@@ -1,6 +1,6 @@
-from src.head_hunter_api import HeadHunterApi
-from src.vacancy import Vacancy
 from config import config
+from src.head_hunter_api import HeadHunterApi
+from src.utils import create_database, save_data_to_database
 
 
 def user_interaction() -> None:
@@ -9,15 +9,27 @@ def user_interaction() -> None:
     params = config()
 
     # Список компаний для HeadHunter
-    vacancy_companies = []
+    vacancy_companies = [
+        {"company_id": "5451960", "company_name": "ООО ВФМ Технолоджи"},
+        {"company_id": "9943617", "company_name": "ООО Сити Логистик"},
+        {"company_id": "5441784", "company_name": "ООО Томикс"},
+        {"company_id": "1362151", "company_name": "Герцен"},
+        {"company_id": "1651", "company_name": "ООО ТОКК, Завод упаковочных изделий"},
+        {"company_id": "1867006", "company_name": "ООО Гравион"},
+    ]
 
-    # Создание экземпляра класса для выгрузки вакансий
-    hh_api = HeadHunterApi()
+    # Создание базы данных vacancies с таблицами companies, vacancies
+    create_database("vacancies", params)
 
     for company in vacancy_companies:
-        hh_vacancies = hh_api.get_vacancies(company, 20)
-        # Формирование списка экземпляров класса вакансий из полученных данных
-        vacancies_list = Vacancy.cast_to_object_list(hh_vacancies)
+        # Создание экземпляра класса для выгрузки вакансий
+        hh_api = HeadHunterApi()
+        # Получение вакансий по заданной компании
+        company_id = company["company_id"]
+        company_name = company["company_name"]
+        hh_vacancies = hh_api.get_vacancies(company_id, 5)
+        # Добавление данных в базу данных vacancies
+        save_data_to_database(hh_vacancies, company_name, "vacancies", params)
 
 
 if __name__ == "__main__":
